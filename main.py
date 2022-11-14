@@ -9,17 +9,10 @@ app = FastAPI()
 
 templates = Jinja2Templates(directory="templates")
 
-#@app.get("/")
-#async def root():
-#    return {"message": "Hello World"}
 
 @app.get("/")
 def home(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
-
-@app.get("/hello/{name}")
-async def say_hello(name: str):
-    return {"message": f"Hello {name}"}
 
 
 @app.post("/get_text")
