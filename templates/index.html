@@ -12,17 +12,42 @@
   <div class="container">
     <div class="jumbotron">
       <h1> OCR Tool </h1>
-      <p> Extract text from Images <p>
+      <p> Najlepszy ocr  <p>
     </div>
-    <label for="image_file">Select image(s)</label>
+    <label for="image_file">Wybierz obraz</label>
     <input class="btn btn-warning" type="file" id="image_file" name="myfile" multiple>
     <br>
-    <button class="btn btn-success" onclick="performOCR()"> Extract Text </button>
+    <button class="btn btn-success" onclick="performOCR()"> Odczytaj tekst </button>
+
     <br>
+
     <hr style="width:100%;text-align:left;margin-left:0">
     <hr style="width:100%;text-align:left;margin-left:0">
-    <div id="bulk_result" style="display: grid; grid-template-columns: repeat(5, 1fr); grid-gap: 10px;">
+
   </div>
 </body>
 
+<script>
+  function performOCR(){
+    var files = document.getElementById("image_file").files
+    var formData = new FormData();
+    var endpoint = '/extract_text';
+    formData.append('image', files[0])
+
+    $.ajax({
+      type: 'POST',
+      url: endpoint,
+      data: formData,
+      contentType: false,
+      cache: false,
+      processData: false,
+      success: function (data){
+        swal("Odczytany tekst", data.text);
+      }
+    });
+
+  }
+
+
+</script>
 </html>

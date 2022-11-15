@@ -1,9 +1,9 @@
 import pytesseract
 import os
 import sys
+pytesseract.pytesseract.tesseract_cmd = r'C:/Program Files/Tesseract-OCR/tesseract.exe'
 
-
-async def read_image(img_path, lang='eng'):
+def read_image(img_path, lang='eng'):
     """
     Performs OCR on a single image
     :img_path: str, path to the image file
@@ -17,7 +17,7 @@ async def read_image(img_path, lang='eng'):
     except:
         return "[ERROR] Unable to process file: {0}".format(img_path)
 
-async def read_images_from_dir(dir_path, lang='eng', write_to_file=False):
+def read_images_from_dir(dir_path, lang='eng', write_to_file=False):
     """
     Performs OCR on all images present in a directory
     :dir_path: str, path to the directory of images
@@ -29,7 +29,7 @@ async def read_images_from_dir(dir_path, lang='eng', write_to_file=False):
     converted_text = {}
     for file_ in os.listdir(dir_path):
         if file_.endswith(('png', 'jpeg', 'jpg')):
-            text = await read_image(os.path.join(dir_path, file_), lang=lang)
+            text = read_image(os.path.join(dir_path, file_), lang=lang)
             converted_text[os.path.join(dir_path, file_)] = text
     if write_to_file:
         for file_path, text in converted_text.items():

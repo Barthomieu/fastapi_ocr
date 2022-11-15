@@ -1,10 +1,10 @@
-import os.path
+import os
 import shutil
 import uvicorn
 import utils.image_ocr as ocr
 from fastapi import FastAPI, Request, UploadFile, File
-from fastapi.params import File
 from fastapi.templating import Jinja2Templates
+
 app = FastAPI()
 
 templates = Jinja2Templates(directory="templates")
@@ -15,17 +15,17 @@ def home(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
 
-@app.post("/get_text")
-def preform_ocr(image: UploadFile = File(...)):
+@app.post("/extract_text")
+def perform_ocr(image: UploadFile = File(...)):
     temp_file = _save_file_to_disc(image, path="temp", save_as="temp")
     text = ocr.read_image(temp_file)
-    return {"filename": image.filenamee, "text": text}
+    return {"filename": image.filename, "text": text}
 
 def _save_file_to_disc(uploaded_file, path=".", save_as="default"):
     extension = os.path.splitext(uploaded_file.filename)[-1]
-    temp_file = os.path.json(path, save_as + extension)
+    temp_file = os.path.join(path, save_as + extension)
     with open(temp_file, "wb") as buffer:
-        shutil.copyfileobj(uploaded_file, buffer)
+        shutil.copyfileobj(uploaded_file.file, buffer)
     return temp_file
 
 
