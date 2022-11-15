@@ -1,9 +1,8 @@
 import PIL
 
-import utils.image_ocr as ocr
+import app.utils.image_ocr as ocr
 import pytesseract
 from PIL import Image
-from PIL import ImageFilter
 
 pytesseract.pytesseract.tesseract_cmd = r'C:/Program Files/Tesseract-OCR/tesseract.exe'
 path = 'temp.png'
