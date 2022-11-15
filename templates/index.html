@@ -10,16 +10,22 @@
 </head>
 <body>
   <div class="container">
-    <div class="jumbotron">
-      <h1> OCR Tool </h1>
-      <p> Najlepszy ocr  <p>
+    <div class="jumbotron" style="text-align:center">
+      <h1>  Ultra Fantastic OCR tool </h1>
+      <p> Zaawansowane narzędzie do zaawansowanego odczytywania tekstu z obrazów  <p>
     </div>
     <label for="image_file">Wybierz obraz</label>
     <input class="btn btn-warning" type="file" id="image_file" name="myfile" multiple>
     <br>
     <button class="btn btn-success" onclick="performOCR()"> Odczytaj tekst </button>
+     <br>
+    <div class="form-group" align="right">
+    <label for="resultTextarea1">Result</label>
+    <textarea style="float:right" class="form-control" id="resultTextarea1" rows="6" ></textarea>
+      <br>
+      <button onclick="copy()">Copy</button>
+    </div>
 
-    <br>
 
     <hr style="width:100%;text-align:left;margin-left:0">
     <hr style="width:100%;text-align:left;margin-left:0">
@@ -28,6 +34,13 @@
 </body>
 
 <script>
+  function copy() {
+  let textarea = document.getElementById("textarea");
+  textarea.select();
+  document.execCommand("copy");
+}
+
+
   function performOCR(){
     var files = document.getElementById("image_file").files
     var formData = new FormData();
@@ -42,7 +55,8 @@
       cache: false,
       processData: false,
       success: function (data){
-        swal("Odczytany tekst", data.text);
+        <!--swal("Odczytany tekst", data.text);-->
+        $("#resultTextarea1").val(data.text);
       }
     });
 

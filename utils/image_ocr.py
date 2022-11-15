@@ -3,7 +3,7 @@ import os
 import sys
 pytesseract.pytesseract.tesseract_cmd = r'C:/Program Files/Tesseract-OCR/tesseract.exe'
 
-def read_image(img_path, lang='eng'):
+async def read_image(img_path, lang='eng'):
     """
     Performs OCR on a single image
     :img_path: str, path to the image file
