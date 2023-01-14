@@ -23,14 +23,14 @@ jobs:
       uses: docker/login-action@v1
       with:
         registry: https://projectocrregistry.azurecr.io/
-        username: ${{ secrets.AzureAppService_ContainerUsername_9d77b08d1cda4d6393b8449f89a597d8 }}
-        password: ${{ secrets.AzureAppService_ContainerPassword_8eeb6dcd5935467b9e888cc54451246a }}
+        username: ${{ secrets.AzureAppService_ContainerUsername_ce80ba3529c545469deed34df4c76c0c }}
+        password: ${{ secrets.AzureAppService_ContainerPassword_280c125e593740ccb9bfb869d7bf3880 }}
 
     - name: Build and push container image to registry
       uses: docker/build-push-action@v2
       with:
         push: true
-        tags: projectocrregistry.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_9d77b08d1cda4d6393b8449f89a597d8 }}/fastapi_ocr:${{ github.sha }}
+        tags: projectocrregistry.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_ce80ba3529c545469deed34df4c76c0c }}/projectocrregistry/fastapi_ocr:${{ github.sha }}
         file: ./Dockerfile
 
   deploy:
@@ -47,5 +47,5 @@ jobs:
       with:
         app-name: 'bestocr'
         slot-name: 'production'
-        publish-profile: ${{ secrets.AzureAppService_PublishProfile_000618e2f3ac447983633d427f530f79 }}
-        images: 'projectocrregistry.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_9d77b08d1cda4d6393b8449f89a597d8 }}/fastapi_ocr:${{ github.sha }}'
+        publish-profile: ${{ secrets.AzureAppService_PublishProfile_6e580bb7766e44619d05e026362d1f40 }}
+        images: 'projectocrregistry.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_ce80ba3529c545469deed34df4c76c0c }}/projectocrregistry/fastapi_ocr:${{ github.sha }}'
