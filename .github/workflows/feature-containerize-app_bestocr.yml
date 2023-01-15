@@ -30,7 +30,7 @@ jobs:
       uses: docker/build-push-action@v2
       with:
         push: true
-        tags: projectocrregistry.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_176f6dadaa57470abe368c0681db4a1d }}/projectocrregistry/projectocrregistry/fastapi_ocr:${{ github.sha }}
+        tags: projectocrregistry.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_176f6dadaa57470abe368c0681db4a1d }}/fastapi_ocr:${{ github.sha }}
         file: ./Dockerfile
 
   deploy:
@@ -48,4 +48,4 @@ jobs:
         app-name: 'bestocr'
         slot-name: 'production'
         publish-profile: ${{ secrets.AzureAppService_PublishProfile_df7a7448d2454cfbb3e0f69731f49bb6 }}
-        images: 'projectocrregistry.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_176f6dadaa57470abe368c0681db4a1d }}/projectocrregistry/projectocrregistry/fastapi_ocr:${{ github.sha }}'
+        images: 'projectocrregistry.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_176f6dadaa57470abe368c0681db4a1d }}/fastapi_ocr:${{ github.sha }}'
