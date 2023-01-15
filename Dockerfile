@@ -10,6 +10,7 @@ RUN apt-get update && \
         python3-dev \
         python3-setuptools \
         tesseract-ocr \
+        libgl1 \
         make \
         gcc \
     && python3 -m pip install -r requirements.txt

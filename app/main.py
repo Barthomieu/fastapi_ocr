@@ -1,7 +1,8 @@
+import os
 import shutil
 import uvicorn
 import base64
-from app.utils.image_ocr import read_img, read_image, apply_ocr
+import app.utils.image_ocr as ocr
 from fastapi import FastAPI, Request, UploadFile, File, Depends, HTTPException
 from fastapi.responses import HTMLResponse, FileResponse
 from fastapi.templating import Jinja2Templates
@@ -19,7 +20,7 @@ def home(request: Request):
 @app.post("/extract_text")
 async def perform_ocr(image: UploadFile = File(...)):
     temp_file = _save_file_to_disc(image, path="app/temp", save_as="temp")
-    text = await read_image(temp_file)
+    text = await ocr.read_image(temp_file)
     try:
         contents = image.file.read()
         with open("uploaded_" + image.filename, "wb") as f:
@@ -34,9 +35,9 @@ async def perform_ocr(image: UploadFile = File(...)):
 
 @app.post("/convert")
 async def post_image_to_text(file: UploadFile = File(...)):
-    img = await read_img(file, HTTPException(status_code=422, detail="Invalid image"))
+    img = await ocr.read_img(file, HTTPException(status_code=422, detail="Invalid image"))
 
-    ocr_predictions: str = apply_ocr(img)
+    ocr_predictions: str = ocr.apply_ocr(img)
     print(ocr_predictions)
     return {
         "results": {
