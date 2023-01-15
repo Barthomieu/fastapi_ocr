@@ -1,7 +1,7 @@
 import shutil
 import uvicorn
 import base64
-from utils.image_ocr import *
+from app.utils.image_ocr import read_img, read_image, apply_ocr
 from fastapi import FastAPI, Request, UploadFile, File, Depends, HTTPException
 from fastapi.responses import HTMLResponse, FileResponse
 from fastapi.templating import Jinja2Templates
