@@ -6,7 +6,9 @@ import cv2
 from PIL import Image
 from numpy import asarray, ndarray, ones, uint8
 from fastapi import UploadFile
-#pytesseract.pytesseract.tesseract_cmd = r'C:/Program Files/Tesseract-OCR/tesseract.exe'
+
+
+# pytesseract.pytesseract.tesseract_cmd = r'C:/Program Files/Tesseract-OCR/tesseract.exe'
 
 async def read_image(img_path, lang='eng'):
     """
@@ -21,6 +23,7 @@ async def read_image(img_path, lang='eng'):
         return pytesseract.image_to_string(img_path, lang=lang)
     except:
         return "[ERROR] Unable to process file: {0}".format(img_path)
+
 
 def read_images_from_dir(dir_path, lang='eng', write_to_file=False):
     """
@@ -40,6 +43,7 @@ def read_images_from_dir(dir_path, lang='eng', write_to_file=False):
         for file_path, text in converted_text.items():
             _write_to_file(text, os.path.splitext(file_path)[0] + ".txt")
     return converted_text
+
 
 def _write_to_file(text, file_path):
     """
@@ -111,10 +115,8 @@ def apply_ocr(img_array: ndarray):
     # 4. Blur & segment image
     img = blur_img(img)
 
-
     try:
-        preds: str = pytesseract.image_to_string(img)  
+        preds: str = pytesseract.image_to_string(img)
         return preds
     except:
         return "[ERROR] Unable to process file)"
-   

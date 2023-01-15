@@ -1,4 +1,3 @@
-import os
 import shutil
 import uvicorn
 import base64
@@ -46,8 +45,6 @@ async def post_image_to_text(file: UploadFile = File(...)):
             "lines": ocr_predictions.split("\n"),
         }
     }
-
-
 
 
 def _save_file_to_disc(uploaded_file, path=".", save_as="default"):
