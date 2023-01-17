@@ -3,10 +3,11 @@ import os
 import sys
 import io
 import cv2
+import shutil
 from PIL import Image
 from numpy import asarray, ndarray, ones, uint8
 from fastapi import UploadFile
-
+from .image_preprocesing import denoise_img, blur_img, convert_to_grayscale, resize_img
 
 # pytesseract.pytesseract.tesseract_cmd = r'C:/Program Files/Tesseract-OCR/tesseract.exe'
 
@@ -44,6 +45,13 @@ def read_images_from_dir(dir_path, lang='eng', write_to_file=False):
             _write_to_file(text, os.path.splitext(file_path)[0] + ".txt")
     return converted_text
 
+def save_file(uploaded_file, path=".", save_as="default"):
+    extension = os.path.splitext(uploaded_file.filename)[-1]
+    temp_file = os.path.join(path, save_as + extension)
+    with open(temp_file, "wb") as buffer:
+        shutil.copyfileobj(uploaded_file.file, buffer)
+    return temp_file
+
 
 def _write_to_file(text, file_path):
     """
@@ -69,35 +77,6 @@ async def read_img(img: UploadFile, read_exception):
     print("obraz po przetworzeniu", img_array)
     return img_array
 
-
-def resize_img(img_array: ndarray):
-    # Resize image
-    return cv2.resize(img_array, None, fx=1.2, fy=1.2, interpolation=cv2.INTER_CUBIC)
-
-
-def convert_to_grayscale(img_array):
-    img = cv2.cvtColor(img_array, cv2.COLOR_BGR2GRAY)
-
-    return img
-
-
-def denoise_img(img_array):
-    kernel = ones((1, 1), uint8)
-    img = cv2.dilate(img_array, kernel, iterations=1)
-    img = cv2.erode(img_array, kernel, iterations=1)
-
-    return img
-
-
-def blur_img(img_array):
-    # Extract & blur the bg so that the text is highlighted
-    bg = cv2.threshold(
-        cv2.medianBlur(img_array, 3), 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU
-    )[1]
-
-    img = 255 - cv2.absdiff(img_array, bg)
-
-    return img
 
 
 def apply_ocr(img_array: ndarray):
