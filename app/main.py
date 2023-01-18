@@ -1,19 +1,18 @@
-import os
-import io
-import cv2
-import uvicorn
-import base64
 import asyncio
+import base64
+import io
 import time
-import requests
+from typing import List
 import pytesseract
+import requests
+import uvicorn
+from PIL import Image
+from fastapi import FastAPI, Request, UploadFile, File, HTTPException
+from fastapi.responses import StreamingResponse, FileResponse
+from fastapi.templating import Jinja2Templates
+
 import app.utils.image_ocr as ocr
 import app.utils.image_preprocesing as preprocesing
-from typing import List
-from PIL import Image
-from fastapi import FastAPI, Request, UploadFile, File, Depends, HTTPException
-from fastapi.responses import StreamingResponse
-from fastapi.templating import Jinja2Templates
 
 app = FastAPI()
 
@@ -23,6 +22,11 @@ templates = Jinja2Templates(directory="app/templates")
 @app.get("/")
 def home(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
+
+
+@app.get("/image/{image_id}")
+def get_image(image_id: str):
+    return FileResponse(path=f"app/temp/{image_id}.jpg")
 
 
 @app.post("/extract_text")
@@ -41,6 +45,7 @@ async def perform_ocr(image: UploadFile = File(...)):
     base64_encoded_image = base64.b64encode(contents).decode("utf-8")
     return {"filename": image.filename, "text": text, "myImage": base64_encoded_image}
 
+
 @app.post("/extract_text_from_many_files")
 async def extract_text(Images: List[UploadFile] = File(...)):
     response = {}
@@ -53,9 +58,10 @@ async def extract_text(Images: List[UploadFile] = File(...)):
     text = await asyncio.gather(*tasks)
     for i in range(len(text)):
         response[Images[i].filename] = text[i]
-    response["Time Taken"] = round((time.time() - s),2)
+    response["Time Taken"] = round((time.time() - s), 2)
 
     return response
+
 
 @app.post("/convert")
 async def post_image_to_text(file: UploadFile = File(...)):
@@ -84,12 +90,14 @@ async def extract_text_from_url(url: str):
     except Exception as e:
         raise HTTPException(status_code=422, detail=str(e))
 
+
 @app.post("/extract_text_with_language")
 async def extract_text_with_language(image: UploadFile = File(...), language: str = "eng"):
     temp_file = ocr.save_file(image, path="app/temp", save_as="temp")
     image = Image.open(temp_file)
     text = pytesseract.image_to_string(image, lang=language)
     return {"text": text}
+
 
 @app.post("/search_text_in_images/{text_to_search}")
 async def search_text_in_images(text_to_search: str, images: List[UploadFile] = File(...)):
@@ -103,6 +111,7 @@ async def search_text_in_images(text_to_search: str, images: List[UploadFile] = 
             return {"status": "found", "text": text_to_search, "file_name": images[i].filename}
     return {"status": "not found", "text": text_to_search}
 
+
 @app.post("/get_image_with_bounding_boxes")
 async def post_image_with_bounding_boxes(image: UploadFile = File(...)):
     temp_file = ocr.save_file(image, path="app/temp", save_as="temp")
@@ -114,6 +123,7 @@ async def post_image_with_bounding_boxes(image: UploadFile = File(...)):
     # Set the pointer to the beginning of the BytesIO object
     img_bytes.seek(0)
     return StreamingResponse(img_bytes, media_type='image/jpeg')
+
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)

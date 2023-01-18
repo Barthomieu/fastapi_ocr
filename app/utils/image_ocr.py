@@ -1,13 +1,12 @@
 import pytesseract
 import os
-import sys
 import io
-import cv2
 import shutil
 from PIL import Image
-from numpy import asarray, ndarray, ones, uint8
+from numpy import asarray, ndarray
 from fastapi import UploadFile
 from .image_preprocesing import denoise_img, blur_img, convert_to_grayscale, resize_img
+
 
 # pytesseract.pytesseract.tesseract_cmd = r'C:/Program Files/Tesseract-OCR/tesseract.exe'
 
@@ -45,6 +44,7 @@ def read_images_from_dir(dir_path, lang='eng', write_to_file=False):
             _write_to_file(text, os.path.splitext(file_path)[0] + ".txt")
     return converted_text
 
+
 def save_file(uploaded_file, path=".", save_as="default"):
     extension = os.path.splitext(uploaded_file.filename)[-1]
     temp_file = os.path.join(path, save_as + extension)
@@ -76,7 +76,6 @@ async def read_img(img: UploadFile, read_exception):
     img_array = asarray(img)
     print("obraz po przetworzeniu", img_array)
     return img_array
-
 
 
 def apply_ocr(img_array: ndarray):

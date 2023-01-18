@@ -1,11 +1,9 @@
-
-
 import cv2
-from numpy import asarray, ndarray, ones, uint8
+from numpy import ndarray, ones, uint8
 import pytesseract
 
+
 def resize_img(img_array: ndarray):
-    # Resize image
     return cv2.resize(img_array, None, fx=1.2, fy=1.2, interpolation=cv2.INTER_CUBIC)
 
 
@@ -24,7 +22,6 @@ def denoise_img(img_array):
 
 
 def blur_img(img_array):
-    # Extract & blur the bg so that the text is highlighted
     bg = cv2.threshold(
         cv2.medianBlur(img_array, 3), 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU
     )[1]
