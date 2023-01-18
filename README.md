@@ -14,37 +14,38 @@ The microservice also cleans and processes the uploaded images with OpenCV; impr
 
 
 
-#Run locally
+## Run locally
 
 ----------------------------
-###Clone the repo
+### Clone the repo
 ```angular2html
 git clone https://github.com/Barthomieu/fastapi_ocr.git
 ```
 
-###Install dependencies
+### Install dependencies
 ```
 pip install -r requirements.txt
 ```
-###Run Server
+### Run Server
 ```
 cd app
 uvicorn pdfapi:app --host 0.0.0.0 --port 8000 --reload
 ```
-###Run on Docker
+### Run on Docker
 ```
 docker build -t fastapi_ocr .   
 ```
-###Run the docker container
+### Run the docker container
 ```
 docker run -d --name my_container api_ocr 
 ```
 
 
-##Documentation
+## Documentation
 
 -----------------------------------------------------------
 The api contains the following endpoints
 
 * #### ```/extract_text``` - returns text from uploaded file
 * #### ```/extract_text_from_many_files``` - return text from all uploades files
+* #### ```/extract_text_from_url``` - return text from url with image
