@@ -25,13 +25,11 @@ jobs:
         registry: https://projectocrregistry.azurecr.io/
         username: ${{ secrets.AzureAppService_ContainerUsername_faa90e24166f48b4b7e2c3882c2f288e }}
         password: ${{ secrets.AzureAppService_ContainerPassword_c93a36c5b2d843f1b98cf9e2aeec3fa9 }}
-
-    - name: Build and push container image to registry
-      uses: docker/build-push-action@v2
-      with:
-        push: true
-        tags: projectocrregistry.azurecr.io/fastapi_ocr:${{ github.sha }}
-        file: ./Dockerfile
+        
+    - name: Run PEP8
+      run: |
+        pip install flake8
+        flake8 
 
   deploy:
     runs-on: ubuntu-latest
