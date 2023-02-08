@@ -1,11 +1,11 @@
-##About project
+## About project
 
 ----------------------------------
 The project is an implementation of a microservice for reading text from images, powered by  Tesseract OCR, that can be easily incorporated in any application via a simple-to-use API built with FastAPI. The whole microservice is containerized using Docker, making it easier for anyone to set up a local copy and bend it to their needs.
 
 The microservice also cleans and processes the uploaded images with OpenCV; improving the OCR predictions of the Tesseract model.
 
-##Built With
+## Built With
 - [Python](https://python.org/)
 - [FastAPI](https://fastapi.tiangolo.com/)
 - [Tesseract OCR](https://tesseract-ocr.github.io/)
